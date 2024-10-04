@@ -14,6 +14,9 @@ const io = new Server(httpServer,{
 io.on("connection", (socket) => {
     console.log('connected');
 });
+setInterval(() => {
+    io.emit('test', `${new Date()}`);
+}, 1000);
 const port = 3000;
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/mongoexample', {
