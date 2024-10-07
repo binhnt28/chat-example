@@ -1,6 +1,7 @@
 const express = require('express');
 const { createServer } = require('http');
 const mongoose = require('mongoose');
+require('dotenv').config();
 const apiRoutes = require('./routes/apiRoutes'); // Import routes
 const { Server } = require('socket.io');
 const app = express();
@@ -25,6 +26,11 @@ mongoose.connect('mongodb://localhost:27017/mongoexample', {
 })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Could not connect to MongoDB:', err));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    next();
+});
 // Middleware JSON
 app.use(express.json());
 // Use routes

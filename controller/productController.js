@@ -24,7 +24,7 @@ exports.createProduct = async (req, res) => {
 
 exports.addReview = async (req, res) => {
     try {
-        const data = req.body;
+            const data = req.body;
         let product = data.productId ? await Product.findById(data.productId) : null;
         await ReviewValidate.validateAsync({...data, product})
         product.review.push({
