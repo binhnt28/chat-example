@@ -5,22 +5,20 @@ const [RegisterValidator, LoginValidator] = require('../validator/AuthValidator'
 const {sendSuccess, sendError} = require('../helper/responseHelper');
 exports.register = async  (req, res) => {
     try {
-        // return sendSuccess(res);
+    
         await RegisterValidator.validateAsync(req.body);
         const data = req.body;
-
         const user = {
             name: data.name,
             email: data.email,
             username: data.username,
             password: await bcrypt.hash(data.password, 10)
         }
-
         const newUser = new User(user);
         await newUser.save();
         sendSuccess(res);
     } catch (err) {
-        sendError(res,[], err.isJoi ? err.details[0].message : 'Server error', 500)
+        sendError(res,{}, err.isJoi ? err.details[0].message : 'Server error', 500)
     }
 }
 
@@ -37,14 +35,14 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
         const JWT_SECRET = process.env.JWT_SECRET;
-        const token = jwt.sign({ username: user.username}, JWT_SECRET, {
+        const token = jwt.sign({_id: user._id, username: user.username}, JWT_SECRET, {
             expiresIn: '1h'
         })
-        sendSuccess(res,[token], 'Login successful');
+        sendSuccess(res, {token: token, _id: user._id}, 'Login successful');
     } catch (err) {
         if (err.isJoi) {
             return res.status(400).json({ message: err.details[0].message });
         }
-        return res.status(500).json({ message: 'Có lỗi xảy ra!' });
+        sendError(res,{}, 'Server error !');
     }
 }

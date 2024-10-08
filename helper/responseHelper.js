@@ -1,4 +1,4 @@
-exports.sendSuccess = (res, data = [], message = '', statusCode = 200) => {
+exports.sendSuccess = (res, data = {}, message = '', statusCode = 200) => {
     res.status(statusCode).json({
         status: true,
         data: data,
@@ -6,7 +6,7 @@ exports.sendSuccess = (res, data = [], message = '', statusCode = 200) => {
     })
 }
 
-exports.sendError = (res, data = [], message = '', statusCode = 400) => {
+exports.sendError = (res, data = {}, message = '', statusCode = 400) => {
     res.status(statusCode).json({
         status: false,
         data: data,
