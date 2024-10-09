@@ -21,7 +21,6 @@ app.use((req, res, next) => {
     next();
 });
 const io = initializeSocket(httpServer);
-
 // Middleware JSON
 app.use(express.json());
 
