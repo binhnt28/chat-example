@@ -5,7 +5,7 @@ const [RegisterValidator, LoginValidator] = require('../validator/AuthValidator'
 const {sendSuccess, sendError} = require('../helper/responseHelper');
 exports.register = async  (req, res) => {
     try {
-    
+
         await RegisterValidator.validateAsync(req.body);
         const data = req.body;
         const user = {
@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
         }
         const JWT_SECRET = process.env.JWT_SECRET;
         const token = jwt.sign({_id: user._id, username: user.username}, JWT_SECRET, {
-            expiresIn: '1h'
+            expiresIn: '24h'
         })
         sendSuccess(res, {token: token, _id: user._id}, 'Login successful');
     } catch (err) {

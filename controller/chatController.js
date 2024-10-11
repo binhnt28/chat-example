@@ -2,9 +2,8 @@ const User = require('../model/user')
 const Message = require('../model/message')
 const MessageDetail = require('../model/messageDetail')
 const { sendSuccess, sendError } = require('../helper/responseHelper');
-const { getIoInstanse } = require('../socket-io');
+const { getIoInstanse, userSockets } = require('../socket-io');
 const CreateMessageSchema = require('../validator/ChatValidator');
-const mongoose = require("mongoose");
 exports.listMessage = async (req, res) => {
     // const groupId = await
     let messages = await Message.find({
@@ -60,21 +59,23 @@ exports.sendMessage = async (req, res) => {
         const detail = new MessageDetail({
             message_id: message._id,
             sender: data.sender,
-            message: data.message
+            message: data.message,
+            created_at: Date.now()
         })
 
         await detail.save();
         message.last_message = detail._id;
         await message.save();
         message = message.toObject();
-        detail.sender = sender; 
+        detail.sender = sender;
         message.last_message = detail;
         message.info = [sender];
         const data_response = {
             message: message
         }
         const io = getIoInstanse();
-        socket.to(message._id.toString()).emit('newMessage', message);
+        // console.log(userSockets)
+        io.to(message._id.toString()).emit('Message', message);
         sendSuccess(res, data_response);
     }
     catch (err) {
@@ -109,3 +110,4 @@ exports.detailMessage = async (req, res) => {
 exports.createGroup = async (req, res) => {
 
 }
+

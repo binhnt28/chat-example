@@ -4,7 +4,7 @@ let userSockets = [];
 const initializeSocket = (httpServer) => {
     io = new Server(httpServer, {
         cors: {
-            origin: 'http://localhost:5173',
+            origin: '*',
             methods: ['GET', 'POST'],
         }
     });
@@ -15,16 +15,21 @@ const initializeSocket = (httpServer) => {
             socket.join(room);
             console.log('User joined room:', room);
         });
-        
+
         socket.on('leaveRoom', (room) => {
             socket.leave(room);
             console.log('User left room:', room);
         });
 
         socket.on('registerUser', (userId) => {
-            userSockets[userId] = socket.id; // Lưu socket ID theo user ID
+            userSockets[userId] = socket.id;
             console.log(`User ${userId} registered with socket ID: ${socket.id}`);
         });
+
+        socket.on('newMessage', (data) => {
+           console.log(data.roomId);
+           socket.broadcast.to(data.roomId).emit('Message1', []);
+        })
 
         socket.on('disconnect', () => {
             console.log('User disconnected', socket.id);
@@ -34,7 +39,7 @@ const initializeSocket = (httpServer) => {
             }
         });
     });
-   
+
 
     return io;
 };
@@ -48,4 +53,5 @@ const getIoInstanse = () => {
 module.exports = {
     initializeSocket,
     getIoInstanse,
+    userSockets
 }

@@ -5,12 +5,14 @@ const MessageSchema = new mongoose.Schema({
         ref: 'Group',
         default: null,
     },
+
     user_join: [
         {
             type: mongoose.Schema.ObjectId,
             ref: 'User',
         }
     ],
+
     last_message: {
         type: mongoose.Schema.ObjectId,
         ref: 'MessageDetail'
