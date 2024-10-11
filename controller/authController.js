@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const [RegisterValidator, LoginValidator] = require('../validator/AuthValidator');
 const {sendSuccess, sendError} = require('../helper/responseHelper');
-exports.register = async  (req, res) => {
+exports.register = async (req, res) => {
     try {
 
         await RegisterValidator.validateAsync(req.body);

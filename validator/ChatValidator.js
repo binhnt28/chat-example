@@ -1,6 +1,3 @@
-const mongoose = require('mongoose')
-const Message = require('../model/message')
-const MessageDetail = require('../model/messageDetail')
 const Joi = require("joi");
 
 const CreateMessageSchema = Joi.object({
